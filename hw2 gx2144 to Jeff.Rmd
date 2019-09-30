@@ -1,0 +1,166 @@
+---
+title: "hw2 to Jeff from gx2144"
+author: "Guangling Xu"
+date: "9/30/2019"
+output: github_document
+---
+
+## Import and Clean data
+```{r}
+library(tidyverse)
+library(readxl)
+library(ggplot2)
+```
+
+```{r}
+p1data = 
+  read_excel("./data/p1data.xlsx", sheet = 1 ,range = "A2:N388" ) %>%
+  janitor::clean_names() %>% 
+  na.omit(p1data, cols = " dumpster") %>% 
+  mutate(
+    sports_balls = as.integer(round(sports_balls), digits = 0)
+  )
+
+p1data1 = 
+  read_excel("./data/p1data.xlsx", sheet = 3 , range = "A2:B15") %>% 
+  janitor::clean_names() %>% 
+  na.omit(p1data1) %>% 
+  mutate(year = c(2018),
+         month = as.numeric(month),
+         month = month.name[month]
+   )
+
+  
+p1data2 = 
+  read_excel("./data/p1data.xlsx", sheet = 4 , range = "A2:B15") %>%
+  janitor::clean_names() %>%
+  na.omit(p1data2) %>% 
+  mutate(year = c(2017),
+         month = as.numeric(month),
+         month = month.name[month]
+  )
+
+mergedata = full_join(p1data1 , p1data2) 
+mergedata
+```
+
+## Summary data
+
+* There are 337 rows and 14 columns in sheet"Mr.Trash Wheel".
+ Vriable names are "dumpster","month","year","date","weight (tons)","volume (cubic yards)",	"plastic bottles","polystyrene","cigarette butts","glass bottles","grocery bags","chip bags",	"sports balls","homes powered*"
+ 
+ "dumpster" means the number of bins;
+ 
+ "month", "day", "year" are varaibles denoting the date of collection
+ 
+ "weight" and "volumn" are variables denoting the amount of the trash
+ 
+ "plastic bottles","polystyrene","cigarette butts","glass bottles","grocery bags","chip bags"
+ are variables denoting the type of the trash
+ 
+* There are 20 rows and 3 columns in sheet"mergedata".
+ Variable names are "month","total" and "year"
+ 
+* The total precipitation in 2018 is 23.50
+
+* The median number of sports balls in a dumpster in 2017 is 10
+
+## Problem 2
+## Import and Clean Data
+```{r}
+pols_month = 
+  read.csv("./data/pols-month.csv") %>% 
+  janitor::clean_names() %>%
+  separate(mon, into = c("year", "month","day"), sep = "-") %>%
+  mutate(
+         month = as.numeric(month),
+         month = month.abb[month],
+         president = recode(prez_gop, "0" = "gop", "1" = "dem" , "2" = "gop2")
+         ) %>% 
+  select(-prez_dem) %>% 
+  select(-prez_gop) %>% 
+  select(-day)
+         
+
+snp = 
+  read.csv("./data/snp.csv") %>% 
+  janitor::clean_names() %>%
+  separate(date, into = c("month", "day", "year"), sep = "/") %>%
+  mutate( 
+    month = as.numeric(month)
+  ) %>% 
+  arrange(year,month) %>% 
+  select("year","month",everything()) %>% 
+  mutate(
+    month = month.abb[month])
+
+unemplyment = 
+  read.csv("./data/unemployment.csv")
+unemplyment = 
+  pivot_longer(
+    unemplyment, 
+    Jan:Dec,
+    names_to = "month", 
+    values_to = "unemplyment") %>% 
+  rename(year = Year)  %>%
+  mutate(
+    year = as.character(year)
+  )
+  
+
+```
+
+## Merge data
+```{r}
+result = 
+  left_join(pols_month,snp)
+finalresult = 
+  left_join(result, unemplyment, by = "year")
+head(finalresult,5)
+tail(finalresult,5)## show part of the table
+```
+
+
+## Problem 3
+## Import and Clean Data
+```{r}
+names = 
+  read.csv("./data/Popular_Baby_Names.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(
+    gender = str_to_lower(gender),
+    ethnicity = str_to_lower(ethnicity),
+    ethnicity = recode(ethnicity, "asian and paci" = "asian and pacific islander",
+                       "black non hisp" = "black non hispanic" , 
+                       "white non hisp" = "white non hispanic"),
+    
+   child_s_first_name = str_to_title(child_s_first_name)
+   ) %>% 
+  distinct()
+```
+
+
+## Filter data of Olivia
+```{r}
+olivia = 
+  filter(names, child_s_first_name == "Olivia" , gender == "female") %>% 
+  select(-count) 
+pivot_wider(olivia, 
+              names_from = year_of_birth, 
+              values_from = rank)  
+
+```
+
+## Scatterplot
+```{r}
+male_name = 
+    filter(names, gender == "male" ,year_of_birth == "2016", 
+           ethnicity == "white non hispanic" ) 
+male_nameplot = ggplot(male_name, aes(x = rank, y = count ))+
+  geom_point()+
+  geom_smooth(se = FALSE)
+male_nameplot
+ggsave("male_name.pdf" , male_nameplot , width = 8, height = 5 )
+```
+
+
