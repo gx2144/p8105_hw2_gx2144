@@ -9,14 +9,14 @@ Guangling Xu
 library(tidyverse)
 ```
 
-    ## -- Attaching packages ------------------------------------------ tidyverse 1.2.1 --
+    ## -- Attaching packages ----------------------------------------------------------- tidyverse 1.2.1 --
 
     ## v ggplot2 3.2.1     v purrr   0.3.2
     ## v tibble  2.1.3     v dplyr   0.8.3
     ## v tidyr   1.0.0     v stringr 1.4.0
     ## v readr   1.3.1     v forcats 0.4.0
 
-    ## -- Conflicts --------------------------------------------- tidyverse_conflicts() --
+    ## -- Conflicts -------------------------------------------------------------- tidyverse_conflicts() --
     ## x dplyr::filter() masks stats::filter()
     ## x dplyr::lag()    masks stats::lag()
 
@@ -27,7 +27,7 @@ library(ggplot2)
 
 ``` r
 p1data = 
-  read_excel("./data/p1data.xlsx", sheet = 1 ,range = "A2:N388" ) %>%
+  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = 1 ,range = "A2:N388" ) %>%
   janitor::clean_names() %>% 
   na.omit(p1data, cols = " dumpster") %>% 
   mutate(

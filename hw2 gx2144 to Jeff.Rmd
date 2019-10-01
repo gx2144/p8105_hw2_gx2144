@@ -14,7 +14,7 @@ library(ggplot2)
 
 ```{r}
 p1data = 
-  read_excel("./data/p1data.xlsx", sheet = 1 ,range = "A2:N388" ) %>%
+  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = 1 ,range = "A2:N388" ) %>%
   janitor::clean_names() %>% 
   na.omit(p1data, cols = " dumpster") %>% 
   mutate(
