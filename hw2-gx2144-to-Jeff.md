@@ -88,7 +88,7 @@ mergedata
 bottles”,“grocery bags”,“chip bags” are variables denoting the type
 of the trash
 
-  - There are 20 rows and 3 columns in sheet“mergedata”. Variable names
+  - There are 18 rows and 3 columns in sheet“mergedata”. Variable names
     are “month”,“total” and “year”
 
   - The total precipitation in 2018 is 23.50
