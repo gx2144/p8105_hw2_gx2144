@@ -21,20 +21,17 @@ p1data =
   )
 
 p1data1 = 
-  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = 3 , range = "A2:B15") %>% 
+  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = 4, range = "A2:B15") %>% 
   janitor::clean_names() %>% 
   na.omit(p1data1) %>% 
   mutate(year = c(2018),
          month = as.numeric(month),
          month = month.name[month]
    )
-```
 
-    ## Warning: NAs introduced by coercion
-
-``` r
+  
 p1data2 = 
-  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = 4 , range = "A2:B15") %>%
+  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = 5 , range = "A2:B15") %>%
   janitor::clean_names() %>%
   na.omit(p1data2) %>% 
   mutate(year = c(2017),
@@ -45,28 +42,33 @@ p1data2 =
 mergedata = full_join(p1data1 , p1data2) 
 ```
 
-    ## Joining, by = c("month", "year")
+    ## Joining, by = c("month", "total", "year")
 
 ``` r
 mergedata
 ```
 
-    ## # A tibble: 13 x 4
-    ##    dumpster month     year total
-    ##       <dbl> <chr>    <dbl> <dbl>
-    ##  1        1 <NA>      2018 NA   
-    ##  2        2 <NA>      2018 NA   
-    ##  3        3 <NA>      2018 NA   
-    ##  4        4 <NA>      2018 NA   
-    ##  5        5 <NA>      2018 NA   
-    ##  6        6 <NA>      2018 NA   
-    ##  7        7 <NA>      2018 NA   
-    ##  8       NA January   2017  3.1 
-    ##  9       NA February  2017  3.64
-    ## 10       NA March     2017  4.47
-    ## 11       NA April     2017  1.46
-    ## 12       NA May       2017  3.58
-    ## 13       NA June      2017  0.42
+    ## # A tibble: 18 x 3
+    ##    month     total  year
+    ##    <chr>     <dbl> <dbl>
+    ##  1 January    3.1   2018
+    ##  2 February   3.64  2018
+    ##  3 March      4.47  2018
+    ##  4 April      1.46  2018
+    ##  5 May        3.58  2018
+    ##  6 June       0.42  2018
+    ##  7 January    0.94  2017
+    ##  8 February   4.8   2017
+    ##  9 March      2.69  2017
+    ## 10 April      4.69  2017
+    ## 11 May        9.27  2017
+    ## 12 June       4.77  2017
+    ## 13 July      10.2   2017
+    ## 14 August     6.45  2017
+    ## 15 September 10.5   2017
+    ## 16 October    2.12  2017
+    ## 17 November   7.82  2017
+    ## 18 December   6.11  2017
 
 ## Summary data
 

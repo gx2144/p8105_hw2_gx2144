@@ -22,7 +22,7 @@ p1data =
   )
 
 p1data1 = 
-  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = 3 , range = "A2:B15") %>% 
+  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = 4, range = "A2:B15") %>% 
   janitor::clean_names() %>% 
   na.omit(p1data1) %>% 
   mutate(year = c(2018),
@@ -32,7 +32,7 @@ p1data1 =
 
   
 p1data2 = 
-  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = 4 , range = "A2:B15") %>%
+  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = 5 , range = "A2:B15") %>%
   janitor::clean_names() %>%
   na.omit(p1data2) %>% 
   mutate(year = c(2017),
