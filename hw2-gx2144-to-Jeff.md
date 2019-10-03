@@ -85,7 +85,7 @@ mergedata
 “weight” and “volumn” are variables denoting the amount of the trash
 
 “plastic bottles”,“polystyrene”,“cigarette butts”,“glass
-bottles”,“grocery bags”,“chip bags” are variables denoting the type
+bottles”,“grocery bags”,“chip bags”are variables denoting the type
 of the trash
 
   - There are 18 rows and 3 columns in sheet“mergedata”. Variable names
