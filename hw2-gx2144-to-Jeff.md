@@ -19,9 +19,25 @@ p1data =
   mutate(
     sports_balls = as.integer(round(sports_balls), digits = 0)
   )
+head(p1data)
+```
 
+    ## # A tibble: 6 x 14
+    ##   dumpster month  year date                weight_tons volume_cubic_ya~
+    ##      <dbl> <chr> <dbl> <dttm>                    <dbl>            <dbl>
+    ## 1        1 May    2014 2014-05-16 00:00:00        4.31               18
+    ## 2        2 May    2014 2014-05-16 00:00:00        2.74               13
+    ## 3        3 May    2014 2014-05-16 00:00:00        3.45               15
+    ## 4        4 May    2014 2014-05-17 00:00:00        3.1                15
+    ## 5        5 May    2014 2014-05-17 00:00:00        4.06               18
+    ## 6        6 May    2014 2014-05-20 00:00:00        2.71               13
+    ## # ... with 8 more variables: plastic_bottles <dbl>, polystyrene <dbl>,
+    ## #   cigarette_butts <dbl>, glass_bottles <dbl>, grocery_bags <dbl>,
+    ## #   chip_bags <dbl>, sports_balls <int>, homes_powered <dbl>
+
+``` r
 p1data1 = 
-  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = 4, range = "A2:B15") %>% 
+  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = "2018 Precipitation", range = "A2:B15") %>% 
   janitor::clean_names() %>% 
   na.omit(p1data1) %>% 
   mutate(year = c(2018),
@@ -31,7 +47,7 @@ p1data1 =
 
   
 p1data2 = 
-  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = 5 , range = "A2:B15") %>%
+  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = "2017 Precipitation" , range = "A2:B15") %>%
   janitor::clean_names() %>%
   na.omit(p1data2) %>% 
   mutate(year = c(2017),
@@ -39,36 +55,33 @@ p1data2 =
          month = month.name[month]
   )
 
-mergedata = full_join(p1data1 , p1data2) 
+mergedata = bind_rows(p1data1 , p1data2) 
+head（mergedata）
 ```
 
-    ## Joining, by = c("month", "total", "year")
+    ## # A tibble: 6 x 3
+    ##   month    total  year
+    ##   <chr>    <dbl> <dbl>
+    ## 1 January   0.94  2018
+    ## 2 February  4.8   2018
+    ## 3 March     2.69  2018
+    ## 4 April     4.69  2018
+    ## 5 May       9.27  2018
+    ## 6 June      4.77  2018
 
 ``` r
-mergedata
+tail (mergedata)
 ```
 
-    ## # A tibble: 18 x 3
-    ##    month     total  year
-    ##    <chr>     <dbl> <dbl>
-    ##  1 January    3.1   2018
-    ##  2 February   3.64  2018
-    ##  3 March      4.47  2018
-    ##  4 April      1.46  2018
-    ##  5 May        3.58  2018
-    ##  6 June       0.42  2018
-    ##  7 January    0.94  2017
-    ##  8 February   4.8   2017
-    ##  9 March      2.69  2017
-    ## 10 April      4.69  2017
-    ## 11 May        9.27  2017
-    ## 12 June       4.77  2017
-    ## 13 July      10.2   2017
-    ## 14 August     6.45  2017
-    ## 15 September 10.5   2017
-    ## 16 October    2.12  2017
-    ## 17 November   7.82  2017
-    ## 18 December   6.11  2017
+    ## # A tibble: 6 x 3
+    ##   month     total  year
+    ##   <chr>     <dbl> <dbl>
+    ## 1 July       7.09  2017
+    ## 2 August     4.44  2017
+    ## 3 September  1.95  2017
+    ## 4 October    0     2017
+    ## 5 November   0.11  2017
+    ## 6 December   0.94  2017
 
 ## Summary data
 
@@ -91,9 +104,25 @@ of the trash
   - There are 18 rows and 3 columns in sheet“mergedata”. Variable names
     are “month”,“total” and “year”
 
-  - The total precipitation in 2018 is 23.50
+  - The total precipitation in 2018 is 70.33
 
-  - The median number of sports balls in a dumpster in 2017 is 10
+<!-- end list -->
+
+``` r
+sum(pull(p1data1,total))
+```
+
+    ## [1] 70.33
+
+  - The median number of sports balls in a dumpster in 2017 is 8
+
+<!-- end list -->
+
+``` r
+median(pull(p1data,sports_balls))
+```
+
+    ## [1] 8
 
 ## Problem 2
 
@@ -151,39 +180,39 @@ result =
 
 ``` r
 finalresult = 
-  left_join(result, unemplyment, by = "year")
+  left_join(result, unemplyment, by = c("year","month"))
 head(finalresult,5)
 ```
 
-    ##   year month.x gov_gop sen_gop rep_gop gov_dem sen_dem rep_dem president
-    ## 1 1947     Jan      23      51     253      23      45     198       gop
-    ## 2 1947     Feb      23      51     253      23      45     198       gop
-    ## 3 1947     Mar      23      51     253      23      45     198       gop
-    ## 4 1947     Apr      23      51     253      23      45     198       gop
-    ## 5 1947     May      23      51     253      23      45     198       gop
-    ##    day close month.y unemplyment
-    ## 1 <NA>    NA    <NA>          NA
-    ## 2 <NA>    NA    <NA>          NA
-    ## 3 <NA>    NA    <NA>          NA
-    ## 4 <NA>    NA    <NA>          NA
-    ## 5 <NA>    NA    <NA>          NA
+    ##   year month gov_gop sen_gop rep_gop gov_dem sen_dem rep_dem president
+    ## 1 1947   Jan      23      51     253      23      45     198       gop
+    ## 2 1947   Feb      23      51     253      23      45     198       gop
+    ## 3 1947   Mar      23      51     253      23      45     198       gop
+    ## 4 1947   Apr      23      51     253      23      45     198       gop
+    ## 5 1947   May      23      51     253      23      45     198       gop
+    ##    day close unemplyment
+    ## 1 <NA>    NA          NA
+    ## 2 <NA>    NA          NA
+    ## 3 <NA>    NA          NA
+    ## 4 <NA>    NA          NA
+    ## 5 <NA>    NA          NA
 
 ``` r
 tail(finalresult,5)## show part of the table
 ```
 
-    ##      year month.x gov_gop sen_gop rep_gop gov_dem sen_dem rep_dem
-    ## 9728 2015     Jun      31      54     246      18      44     188
-    ## 9729 2015     Jun      31      54     246      18      44     188
-    ## 9730 2015     Jun      31      54     246      18      44     188
-    ## 9731 2015     Jun      31      54     246      18      44     188
-    ## 9732 2015     Jun      31      54     246      18      44     188
-    ##      president day   close month.y unemplyment
-    ## 9728       gop   1 2063.11     Aug          NA
-    ## 9729       gop   1 2063.11     Sep          NA
-    ## 9730       gop   1 2063.11     Oct          NA
-    ## 9731       gop   1 2063.11     Nov          NA
-    ## 9732       gop   1 2063.11     Dec          NA
+    ##     year month gov_gop sen_gop rep_gop gov_dem sen_dem rep_dem president
+    ## 818 2015   Feb      31      54     245      18      44     188       gop
+    ## 819 2015   Mar      31      54     245      18      44     188       gop
+    ## 820 2015   Apr      31      54     244      18      44     188       gop
+    ## 821 2015   May      31      54     245      18      44     188       gop
+    ## 822 2015   Jun      31      54     246      18      44     188       gop
+    ##     day   close unemplyment
+    ## 818   2 2104.50         5.5
+    ## 819   2 2067.89         5.5
+    ## 820   1 2085.51         5.4
+    ## 821   1 2107.39         5.5
+    ## 822   1 2063.11         5.3
 
 ## Problem 3
 
@@ -210,20 +239,19 @@ names =
 ``` r
 olivia = 
   filter(names, child_s_first_name == "Olivia" , gender == "female") %>% 
-  select(-count) 
-pivot_wider(olivia, 
+  select(-count,-child_s_first_name,-gender) %>% 
+pivot_wider(
               names_from = year_of_birth, 
-              values_from = rank)  
+              values_from = rank) 
+knitr::kable(olivia)
 ```
 
-    ## # A tibble: 4 x 9
-    ##   gender ethnicity child_s_first_n~ `2016` `2015` `2014` `2013` `2012`
-    ##   <chr>  <chr>     <chr>             <int>  <int>  <int>  <int>  <int>
-    ## 1 female asian an~ Olivia                1      1      1      3      3
-    ## 2 female black no~ Olivia                8      4      8      6      8
-    ## 3 female hispanic  Olivia               13     16     16     22     22
-    ## 4 female white no~ Olivia                1      1      1      1      4
-    ## # ... with 1 more variable: `2011` <int>
+| ethnicity                  | 2016 | 2015 | 2014 | 2013 | 2012 | 2011 |
+| :------------------------- | ---: | ---: | ---: | ---: | ---: | ---: |
+| asian and pacific islander |    1 |    1 |    1 |    3 |    3 |    4 |
+| black non hispanic         |    8 |    4 |    8 |    6 |    8 |   10 |
+| hispanic                   |   13 |   16 |   16 |   22 |   22 |   18 |
+| white non hispanic         |    1 |    1 |    1 |    1 |    4 |    2 |
 
 ## Scatterplot
 
@@ -239,7 +267,7 @@ male_nameplot
 
     ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 
-![](hw2-gx2144-to-Jeff_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](hw2-gx2144-to-Jeff_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 ``` r
 ggsave("male_name.pdf" , male_nameplot , width = 8, height = 5 )

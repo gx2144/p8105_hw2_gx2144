@@ -20,9 +20,12 @@ p1data =
   mutate(
     sports_balls = as.integer(round(sports_balls), digits = 0)
   )
+head(p1data)
+```
 
+```{r}
 p1data1 = 
-  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = 4, range = "A2:B15") %>% 
+  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = "2018 Precipitation", range = "A2:B15") %>% 
   janitor::clean_names() %>% 
   na.omit(p1data1) %>% 
   mutate(year = c(2018),
@@ -32,7 +35,7 @@ p1data1 =
 
   
 p1data2 = 
-  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = 5 , range = "A2:B15") %>%
+  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", sheet = "2017 Precipitation" , range = "A2:B15") %>%
   janitor::clean_names() %>%
   na.omit(p1data2) %>% 
   mutate(year = c(2017),
@@ -40,8 +43,9 @@ p1data2 =
          month = month.name[month]
   )
 
-mergedata = full_join(p1data1 , p1data2) 
-mergedata
+mergedata = bind_rows(p1data1 , p1data2) 
+head（mergedata）
+tail (mergedata)
 ```
 
 ## Summary data
@@ -60,9 +64,17 @@ mergedata
 * There are 18 rows and 3 columns in sheet"mergedata".
  Variable names are "month","total" and "year"
  
-* The total precipitation in 2018 is 23.50
+* The total precipitation in 2018 is 70.33
+```{r}
+sum(pull(p1data1,total))
+```
 
-* The median number of sports balls in a dumpster in 2017 is 10
+
+* The median number of sports balls in a dumpster in 2017 is 8
+```{r}
+median(pull(p1data,sports_balls))
+```
+
 
 ## Problem 2
 ## Import and Clean Data
@@ -114,7 +126,7 @@ unemplyment =
 result = 
   left_join(pols_month,snp)
 finalresult = 
-  left_join(result, unemplyment, by = "year")
+  left_join(result, unemplyment, by = c("year","month"))
 head(finalresult,5)
 tail(finalresult,5)## show part of the table
 ```
@@ -143,10 +155,11 @@ names =
 ```{r}
 olivia = 
   filter(names, child_s_first_name == "Olivia" , gender == "female") %>% 
-  select(-count) 
-pivot_wider(olivia, 
+  select(-count,-child_s_first_name,-gender) %>% 
+pivot_wider(
               names_from = year_of_birth, 
-              values_from = rank)  
+              values_from = rank) 
+knitr::kable(olivia)
 
 ```
 
