@@ -155,14 +155,14 @@ snp =
   mutate(
     month = month.abb[month])
 
-unemplyment = 
+unemployment = 
   read.csv("./data/unemployment.csv")
-unemplyment = 
+unemployment = 
   pivot_longer(
-    unemplyment, 
+    unemployment, 
     Jan:Dec,
     names_to = "month", 
-    values_to = "unemplyment") %>% 
+    values_to = "unemployment") %>% 
   rename(year = Year)  %>%
   mutate(
     year = as.character(year)
@@ -180,7 +180,7 @@ result =
 
 ``` r
 finalresult = 
-  left_join(result, unemplyment, by = c("year","month"))
+  left_join(result, unemployment, by = c("year","month"))
 head(finalresult,5)
 ```
 
@@ -190,12 +190,12 @@ head(finalresult,5)
     ## 3 1947   Mar      23      51     253      23      45     198       gop
     ## 4 1947   Apr      23      51     253      23      45     198       gop
     ## 5 1947   May      23      51     253      23      45     198       gop
-    ##    day close unemplyment
-    ## 1 <NA>    NA          NA
-    ## 2 <NA>    NA          NA
-    ## 3 <NA>    NA          NA
-    ## 4 <NA>    NA          NA
-    ## 5 <NA>    NA          NA
+    ##    day close unemployment
+    ## 1 <NA>    NA           NA
+    ## 2 <NA>    NA           NA
+    ## 3 <NA>    NA           NA
+    ## 4 <NA>    NA           NA
+    ## 5 <NA>    NA           NA
 
 ``` r
 tail(finalresult,5)## show part of the table
@@ -207,17 +207,25 @@ tail(finalresult,5)## show part of the table
     ## 820 2015   Apr      31      54     244      18      44     188       gop
     ## 821 2015   May      31      54     245      18      44     188       gop
     ## 822 2015   Jun      31      54     246      18      44     188       gop
-    ##     day   close unemplyment
-    ## 818   2 2104.50         5.5
-    ## 819   2 2067.89         5.5
-    ## 820   1 2085.51         5.4
-    ## 821   1 2107.39         5.5
-    ## 822   1 2063.11         5.3
+    ##     day   close unemployment
+    ## 818   2 2104.50          5.5
+    ## 819   2 2067.89          5.5
+    ## 820   1 2085.51          5.4
+    ## 821   1 2107.39          5.5
+    ## 822   1 2063.11          5.3
 
 \*\*summary datasets
 
-There are 9 columns and 822 rows in pols\_month dataset. Variable names
-are “year”,“month”,“prez\_gop”,“sen\_gop” ""
+There are 9 columns and 822 rows in pols\_month dataset.Variable names
+are “year”,“month”,“prez\_gop”,“sen\_gop”
+“rep\_gop”,“prez\_dem”,“gov\_dem”,“sen\_dem”,“rep\_dem”.Year
+ranges from 1974\~2015.
+
+There are 4 columns and 787 rows in snp dataset. Variable names are
+“year”,“month”,“day”,“close”.Year ranges from 1950\~2015.
+
+There are 3 colunms and 816 rows in unemplyment dataset. Variable names
+are “year”,“month”,“unemployment”Year ranges from 1948\~2015.
 
 ## Problem 3
 
@@ -284,11 +292,11 @@ knitr::kable(popmalename)
 male_name = 
     filter(names, gender == "male" ,year_of_birth == "2016", 
            ethnicity == "white non hispanic" ) 
-male_nameplot = ggplot(male_name, aes(x = rank, y = count ))+
-  geom_point()+
-  geom_smooth(se = FALSE)+
+male_nameplot = ggplot(male_name, aes(x = rank, y = count,color = rank ))+
+  geom_point(size = 5)+
+  geom_smooth(se = FALSE,color="yellow")+
   labs(
-    title = "Relationship between rank and count"
+    title = "count~rank of male, white non-hispanic children born in 2016"
   )
 male_nameplot
 ```

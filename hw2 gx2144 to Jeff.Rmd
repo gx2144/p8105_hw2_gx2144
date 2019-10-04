@@ -105,14 +105,14 @@ snp =
   mutate(
     month = month.abb[month])
 
-unemplyment = 
+unemployment = 
   read.csv("./data/unemployment.csv")
-unemplyment = 
+unemployment = 
   pivot_longer(
-    unemplyment, 
+    unemployment, 
     Jan:Dec,
     names_to = "month", 
-    values_to = "unemplyment") %>% 
+    values_to = "unemployment") %>% 
   rename(year = Year)  %>%
   mutate(
     year = as.character(year)
@@ -126,15 +126,19 @@ unemplyment =
 result = 
   left_join(pols_month,snp)
 finalresult = 
-  left_join(result, unemplyment, by = c("year","month"))
+  left_join(result, unemployment, by = c("year","month"))
 head(finalresult,5)
 tail(finalresult,5)## show part of the table
 ```
 
 **summary datasets
 
-There are 9 columns and 822 rows in pols_month dataset. Variable names are "year","month","prez_gop","sen_gop"
-""
+There are 9 columns and 822 rows in pols_month dataset.Variable names are "year","month","prez_gop","sen_gop"
+"rep_gop","prez_dem","gov_dem","sen_dem","rep_dem".Year ranges from 1974~2015.
+
+There are 4 columns and 787 rows in snp dataset. Variable names are "year","month","day","close".Year ranges from 1950~2015.
+
+There are 3 colunms and 816 rows in unemplyment dataset. Variable names are "year","month","unemployment"Year ranges from 1948~2015.
 
 
 
@@ -183,20 +187,16 @@ pivot_wider(
 knitr::kable(popmalename)
 ```
 
-
-
-
-
 ## Scatterplot
 ```{r}
 male_name = 
     filter(names, gender == "male" ,year_of_birth == "2016", 
            ethnicity == "white non hispanic" ) 
-male_nameplot = ggplot(male_name, aes(x = rank, y = count ))+
-  geom_point()+
-  geom_smooth(se = FALSE)+
+male_nameplot = ggplot(male_name, aes(x = rank, y = count,color = rank ))+
+  geom_point(size = 5)+
+  geom_smooth(se = FALSE,color="yellow")+
   labs(
-    title = "Relationship between rank and count"
+    title = "count~rank of male, white non-hispanic children born in 2016"
   )
 male_nameplot
 ggsave("male_name.pdf" , male_nameplot , width = 8, height = 5 )
