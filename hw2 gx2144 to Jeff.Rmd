@@ -131,6 +131,14 @@ head(finalresult,5)
 tail(finalresult,5)## show part of the table
 ```
 
+**summary datasets
+
+There are 9 columns and 822 rows in pols_month dataset. Variable names are "year","month","prez_gop","sen_gop"
+""
+
+
+
+
 
 ## Problem 3
 ## Import and Clean Data
@@ -163,6 +171,22 @@ knitr::kable(olivia)
 
 ```
 
+## Table of most popular name among male children 
+```{r}
+popmalename = 
+  filter(names,rank == 1, gender =="male") %>% 
+  select(-count, -gender,-rank) %>% 
+pivot_wider(
+              names_from = year_of_birth, 
+              values_from = child_s_first_name
+              ) 
+knitr::kable(popmalename)
+```
+
+
+
+
+
 ## Scatterplot
 ```{r}
 male_name = 
@@ -170,7 +194,10 @@ male_name =
            ethnicity == "white non hispanic" ) 
 male_nameplot = ggplot(male_name, aes(x = rank, y = count ))+
   geom_point()+
-  geom_smooth(se = FALSE)
+  geom_smooth(se = FALSE)+
+  labs(
+    title = "Relationship between rank and count"
+  )
 male_nameplot
 ggsave("male_name.pdf" , male_nameplot , width = 8, height = 5 )
 ```

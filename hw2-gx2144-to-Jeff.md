@@ -214,6 +214,11 @@ tail(finalresult,5)## show part of the table
     ## 821   1 2107.39         5.5
     ## 822   1 2063.11         5.3
 
+\*\*summary datasets
+
+There are 9 columns and 822 rows in pols\_month dataset. Variable names
+are “year”,“month”,“prez\_gop”,“sen\_gop” ""
+
 ## Problem 3
 
 ## Import and Clean Data
@@ -253,6 +258,26 @@ knitr::kable(olivia)
 | hispanic                   |   13 |   16 |   16 |   22 |   22 |   18 |
 | white non hispanic         |    1 |    1 |    1 |    1 |    4 |    2 |
 
+## Table of most popular name among male children
+
+``` r
+popmalename = 
+  filter(names,rank == 1, gender =="male") %>% 
+  select(-count, -gender,-rank) %>% 
+pivot_wider(
+              names_from = year_of_birth, 
+              values_from = child_s_first_name
+              ) 
+knitr::kable(popmalename)
+```
+
+| ethnicity                  | 2016   | 2015   | 2014   | 2013   | 2012   | 2011    |
+| :------------------------- | :----- | :----- | :----- | :----- | :----- | :------ |
+| asian and pacific islander | Ethan  | Jayden | Jayden | Jayden | Ryan   | Ethan   |
+| black non hispanic         | Noah   | Noah   | Ethan  | Ethan  | Jayden | Jayden  |
+| hispanic                   | Liam   | Liam   | Liam   | Jayden | Jayden | Jayden  |
+| white non hispanic         | Joseph | David  | Joseph | David  | Joseph | Michael |
+
 ## Scatterplot
 
 ``` r
@@ -261,13 +286,16 @@ male_name =
            ethnicity == "white non hispanic" ) 
 male_nameplot = ggplot(male_name, aes(x = rank, y = count ))+
   geom_point()+
-  geom_smooth(se = FALSE)
+  geom_smooth(se = FALSE)+
+  labs(
+    title = "Relationship between rank and count"
+  )
 male_nameplot
 ```
 
     ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 
-![](hw2-gx2144-to-Jeff_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](hw2-gx2144-to-Jeff_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
 ggsave("male_name.pdf" , male_nameplot , width = 8, height = 5 )
